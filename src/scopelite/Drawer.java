@@ -66,13 +66,25 @@ public class Drawer extends GetX implements Runnable {
     private int barMaxSpot = 678, barMaxSpotDefault = barMaxSpot;
     public double barSensitivity = 5.0d, barSensitivityDefault = 5.0d;
     public int redBarId = -1;
+    /*
     public int barColorRed = 200, barColorRedDefault = barColorRed;
     public int barColorGreen = 120, barColorGreenDefault = barColorGreen;
     public int barColorBlue = 70, barColorBlueDefault = barColorBlue;
-    private Color barColor;
+    * 
+    */
+    private Color barColor = new Color(200, 120, 70);
     
-    public void updateBarColor() {
-        barColor = new Color(barColorRed, barColorGreen, barColorBlue);
+    // Line thickness
+    public int lineThickness = 2;
+    private int lineThicknessLoop;
+    private int lineThicknessOffset;
+    
+    public void setBarColor(Color color) {
+        barColor = color;
+    }
+    
+    public Color getBarColor() {
+        return barColor;
     }
     
     public void modifyBar(int barFreqMod, int barAmountMod) {
@@ -297,44 +309,53 @@ public class Drawer extends GetX implements Runnable {
                                         (int)(barWidth - barBorder), ScopeLite.canvas.getHeight());
                             }
                         
+                            for(lineThicknessLoop = 0; lineThicknessLoop < lineThickness; lineThicknessLoop++) {
+                                
+                                if(lineThicknessLoop % 2 == 0) {
+                                    lineThicknessOffset = lineThicknessLoop / 2 * -1;
+                                } else {
+                                    lineThicknessOffset = lineThicknessLoop / 2 + 1;
+                                }
                         
-                            for(x = 1; x < ScopeLite.screenWidth; x++) {
+                                for(x = 1; x < ScopeLite.screenWidth; x++) {
 
 
-                                // High
-                                g.setColor(highLine);
-                                g.drawLine(x, SignalModifier.modifyY(dataHigh.get(getX(x))) + highOffset,
-                                        x + 1, SignalModifier.modifyY(dataHigh.get(getX(x+1))) + highOffset);
+                                    // High
+                                    g.setColor(highLine);
+                                    g.drawLine(x, SignalModifier.modifyY(dataHigh.get(getX(x))) + highOffset + lineThicknessOffset,
+                                            x + 1, SignalModifier.modifyY(dataHigh.get(getX(x+1))) + highOffset + lineThicknessOffset);
 
 
-                                // Mid
-                                g.setColor(midLine);
-                                g.drawLine(x, SignalModifier.modifyY(dataMid.get(getX(x))) + midOffset,
-                                        x + 1, SignalModifier.modifyY(dataMid.get(getX(x+1))) + midOffset);
+                                    // Mid
+                                    g.setColor(midLine);
+                                    g.drawLine(x, SignalModifier.modifyY(dataMid.get(getX(x))) + midOffset + lineThicknessOffset,
+                                            x + 1, SignalModifier.modifyY(dataMid.get(getX(x+1))) + midOffset + lineThicknessOffset);
 
 
-                                // Low
-                                g.setColor(lowLine);
-                                g.drawLine(x, SignalModifier.modifyY(dataLow.get(getX(x))) + lowOffset,
-                                        x + 1, SignalModifier.modifyY(dataLow.get(getX(x+1))) + lowOffset);
+                                    // Low
+                                    g.setColor(lowLine);
+                                    g.drawLine(x, SignalModifier.modifyY(dataLow.get(getX(x))) + lowOffset + lineThicknessOffset,
+                                            x + 1, SignalModifier.modifyY(dataLow.get(getX(x+1))) + lowOffset + lineThicknessOffset);
+
+                                }
+
+                                g.setColor(leftLine);
+                                for(x = 0; x < ScopeLite.screenWidth; x++) {
+                                    if(x != 0) {
+                                        g.drawLine(x, SignalModifier.modifyY(dataLeft.get(getX(x))) + stereoOffset + lineThicknessOffset,
+                                                x+1, SignalModifier.modifyY(dataLeft.get(getX(x+1))) + stereoOffset + lineThicknessOffset);
+                                    }
+                                }
+
+                                g.setColor(rightLine);
+                                for(x = 0; x < ScopeLite.screenWidth; x++) {
+                                    if(x != 0) {
+                                        g.drawLine(x, SignalModifier.modifyY(dataRight.get(getX(x))) + stereoOffset + lineThicknessOffset, 
+                                                x+1, SignalModifier.modifyY(dataRight.get(getX(x+1))) + stereoOffset + lineThicknessOffset);
+                                    }
+                                }
 
                             }
-
-                            g.setColor(leftLine);
-                            for(x = 0; x < ScopeLite.screenWidth; x++) {
-                                if(x != 0) {
-                                    g.drawLine(x, SignalModifier.modifyY(dataLeft.get(getX(x))) + stereoOffset ,
-                                            x+1, SignalModifier.modifyY(dataLeft.get(getX(x+1))) + stereoOffset );
-                                }
-                            }
-
-                            g.setColor(rightLine);
-                            for(x = 0; x < ScopeLite.screenWidth; x++) {
-                                if(x != 0) {
-                                    g.drawLine(x, SignalModifier.modifyY(dataRight.get(getX(x))) + stereoOffset , 
-                                            x+1, SignalModifier.modifyY(dataRight.get(getX(x+1))) + stereoOffset );
-                                }
-                            } 
 
 
 
@@ -351,7 +372,7 @@ public class Drawer extends GetX implements Runnable {
 
                         g.setColor(Color.WHITE);
 
-                        if(ScopeLite.showGui) {
+                        if(ScopeLite.showFps) {
                             // Draw FPS
 
                             
@@ -367,7 +388,7 @@ public class Drawer extends GetX implements Runnable {
                             // Draw Menu
                             //g.drawString(InputListener.currentMenu.get(InputListener.currentMenuIndex).toString(), 
                             //        ScopeLite.screenWidth / 3, 10);
-                            g.drawString(InputListener.currentMenu.toString(), ScopeLite.screenWidth / 2, 10);
+                            //g.drawString(InputListener.currentMenu.toString(), ScopeLite.screenWidth / 2, 10);
                         }
 
                         if(ScopeLite.showHelp) {
@@ -407,7 +428,7 @@ public class Drawer extends GetX implements Runnable {
                 diff = (int)(System.nanoTime() - deltaTime.getLastSystemTime());
                 //sleepMillis = (wait - diff) / 1000000;
                 //sleepNanos = (wait - diff) - (1000000 * sleepMillis);
-                sleepNanos = wait - diff / 2;
+                sleepNanos = wait - diff;
                 if(diff < wait) {
                     try {
                         //java.lang.concurrent.locks.LockSupport.parkNanos();

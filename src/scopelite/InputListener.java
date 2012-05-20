@@ -6,11 +6,11 @@
  */
 package scopelite;
 
+import gui.GUI;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import scopelite.MenuItem.MenuItem;
 
 /**
  *
@@ -22,7 +22,7 @@ import scopelite.MenuItem.MenuItem;
 
 public class InputListener implements KeyListener, MouseListener {
     
-    public static MenuItem currentMenu = MenuItem.buildMenuTree().getSubItem();
+    //public static MenuItem currentMenu = MenuItem.buildMenuTree().getSubItem();
     //public static ArrayList<MenuItem> currentMenu = MenuItem.buildMenuTree().subMenu();
     //public static int currentMenuIndex = 0;
     public static int rePressDelay = 25;
@@ -55,6 +55,8 @@ public class InputListener implements KeyListener, MouseListener {
     
     private void processKeyCode(int keyCode) {
         switch(keyCode) {
+            
+            /*
             case 107: // Numpad plus
             case 521: // Normal plus
                 currentMenu.plusAction();
@@ -99,12 +101,25 @@ public class InputListener implements KeyListener, MouseListener {
                 currentMenu.resetDefault();
                 break;
                 
+                */
+                
             case 71:  // G
-                ScopeLite.showGui = !ScopeLite.showGui;
+                //ScopeLite.showGui = !ScopeLite.showGui;
+                
+                if(ScopeLite.scopeLite.gui == null)
+                    ScopeLite.scopeLite.gui = new GUI();
+                else {
+                    ScopeLite.scopeLite.gui.dispose();
+                    ScopeLite.scopeLite.gui = null;
+                }
+                    
+                
+                
                 break;
                 
             case 70:  // F
-                ScopeLite.scopeLite.toggleFullscreen();
+                //ScopeLite.scopeLite.toggleFullscreen();
+                ScopeLite.showFps = !ScopeLite.showFps;
                 break;
                 
             case 82: // R

@@ -4,7 +4,7 @@
  */
 package scopelite;
 
-import common.Sleeper;
+import gui.GUI;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import javax.swing.JFrame;
@@ -21,10 +21,11 @@ public class ScopeLite {
     public static Drawer drawer;
     public static SoundCapturer soundCapturer;
     public static SignalModifier signalModifier;
+    public static GUI gui;
     
     // PUBLIC STATIC VARIABLES
     
-    public static boolean showGui = false;
+    public static boolean showFps = false;
     public static boolean showHelp = false;
     public static boolean fullscreen = false;
     public static GraphicsDevice graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
@@ -46,7 +47,7 @@ public class ScopeLite {
     public static String[] helpText = new String[] {
         "h - help", 
         "g - show menu",
-        "f - fullscreen",
+        "f - show fps",
         "space - pause",
         "arrows - move in menu",
         "[+/-] - change menu values",
