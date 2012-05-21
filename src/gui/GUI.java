@@ -43,6 +43,9 @@ public class GUI extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         soundDeviceSelection = new javax.swing.JList();
+        jSplitPane10 = new javax.swing.JSplitPane();
+        jLabel10 = new javax.swing.JLabel();
+        maxFps = new javax.swing.JSpinner();
         jPanel2 = new javax.swing.JPanel();
         jSplitPane2 = new javax.swing.JSplitPane();
         jLabel2 = new javax.swing.JLabel();
@@ -51,7 +54,24 @@ public class GUI extends javax.swing.JFrame {
         jSplitPane4 = new javax.swing.JSplitPane();
         jLabel3 = new javax.swing.JLabel();
         viewBarColor = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        ChangeBarColorButton = new javax.swing.JButton();
+        jSplitPane6 = new javax.swing.JSplitPane();
+        jLabel4 = new javax.swing.JLabel();
+        barMaxFrequency = new javax.swing.JSpinner();
+        jSplitPane7 = new javax.swing.JSplitPane();
+        jLabel5 = new javax.swing.JLabel();
+        barSensitivity = new javax.swing.JSpinner();
+        jPanel3 = new javax.swing.JPanel();
+        splitter = new javax.swing.JSplitPane();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        lineThickness = new javax.swing.JSpinner();
+        jSplitPane8 = new javax.swing.JSplitPane();
+        jLabel8 = new javax.swing.JLabel();
+        lineAmplify = new javax.swing.JSlider();
+        jSplitPane9 = new javax.swing.JSplitPane();
+        jLabel9 = new javax.swing.JLabel();
+        amplitudeHistory = new javax.swing.JSpinner();
 
         colorDialogOk.setText("  OK  ");
         colorDialogOk.addActionListener(new java.awt.event.ActionListener() {
@@ -73,14 +93,19 @@ public class GUI extends javax.swing.JFrame {
         colorDialog.getContentPane().setLayout(colorDialogLayout);
         colorDialogLayout.setHorizontalGroup(
             colorDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(barColorChooser, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 601, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(colorDialogLayout.createSequentialGroup()
+                .addGap(464, 464, 464)
+                .addComponent(jSplitPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(35, Short.MAX_VALUE))
+            .addGroup(colorDialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(barColorChooser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         colorDialogLayout.setVerticalGroup(
             colorDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(colorDialogLayout.createSequentialGroup()
-                .addComponent(barColorChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(barColorChooser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSplitPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -119,13 +144,30 @@ public class GUI extends javax.swing.JFrame {
 
         jSplitPane1.setRightComponent(jScrollPane1);
 
+        jLabel10.setFont(getFont());
+        jLabel10.setText("  Max fps  ");
+        jSplitPane10.setLeftComponent(jLabel10);
+
+        maxFps.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        maxFps.setValue(scopelite.ScopeLite.maxFps);
+        maxFps.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                maxFpsStateChanged(evt);
+            }
+        });
+        jSplitPane10.setRightComponent(maxFps);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 609, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jSplitPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -133,7 +175,9 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(243, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSplitPane10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("System", jPanel1);
@@ -143,7 +187,7 @@ public class GUI extends javax.swing.JFrame {
         jSplitPane2.setLeftComponent(jLabel2);
 
         barAmount.setFont(getFont());
-        barAmount.setModel(new javax.swing.SpinnerNumberModel());
+        barAmount.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
         barAmount.setValue(scopelite.ScopeLite.drawer.getBarAmount());
         barAmount.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -175,13 +219,39 @@ public class GUI extends javax.swing.JFrame {
 
         jSplitPane3.setLeftComponent(jSplitPane4);
 
-        jButton1.setText("Change");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        ChangeBarColorButton.setText("Change");
+        ChangeBarColorButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                ChangeBarColorButtonActionPerformed(evt);
             }
         });
-        jSplitPane3.setRightComponent(jButton1);
+        jSplitPane3.setRightComponent(ChangeBarColorButton);
+
+        jLabel4.setFont(getFont());
+        jLabel4.setText("  Bar max frequency  ");
+        jSplitPane6.setLeftComponent(jLabel4);
+
+        barMaxFrequency.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        barMaxFrequency.setValue(scopelite.ScopeLite.drawer.getMaxBarFreq());
+        barMaxFrequency.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                barMaxFrequencyStateChanged(evt);
+            }
+        });
+        jSplitPane6.setRightComponent(barMaxFrequency);
+
+        jLabel5.setFont(getFont());
+        jLabel5.setText("  Bar sensitivity  ");
+        jSplitPane7.setLeftComponent(jLabel5);
+
+        barSensitivity.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(2.0d), Double.valueOf(0.2d), null, Double.valueOf(0.1d)));
+        barSensitivity.setValue(scopelite.ScopeLite.drawer.barSensitivity);
+        barSensitivity.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                barSensitivityStateChanged(evt);
+            }
+        });
+        jSplitPane7.setRightComponent(barSensitivity);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -189,32 +259,113 @@ public class GUI extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jSplitPane2)
+                    .addComponent(jSplitPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSplitPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSplitPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(392, Short.MAX_VALUE))
+                    .addComponent(jSplitPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
+                    .addComponent(jSplitPane7))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jSplitPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSplitPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(316, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jSplitPane6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSplitPane7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jSplitPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSplitPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(112, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Bars", jPanel2);
+
+        jLabel6.setText("jLabel6");
+        splitter.setLeftComponent(jLabel6);
+
+        jLabel7.setFont(getFont());
+        jLabel7.setText("  Line thickness  ");
+        splitter.setLeftComponent(jLabel7);
+
+        lineThickness.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
+        lineThickness.setValue(scopelite.ScopeLite.drawer.lineThickness);
+        lineThickness.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                lineThicknessStateChanged(evt);
+            }
+        });
+        splitter.setRightComponent(lineThickness);
+
+        jLabel8.setFont(getFont());
+        jLabel8.setText("  Line amplify  ");
+        jSplitPane8.setLeftComponent(jLabel8);
+
+        lineAmplify.setMaximum(1000);
+        lineAmplify.setToolTipText("");
+        lineAmplify.setValue(100);
+        lineAmplify.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                lineAmplifyStateChanged(evt);
+            }
+        });
+        jSplitPane8.setRightComponent(lineAmplify);
+
+        jLabel9.setFont(getFont());
+        jLabel9.setText("  Amplitude history ");
+        jSplitPane9.setLeftComponent(jLabel9);
+
+        amplitudeHistory.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
+        amplitudeHistory.setValue(scopelite.ScopeLite.drawer.samplesPerLongScope);
+        amplitudeHistory.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                amplitudeHistoryStateChanged(evt);
+            }
+        });
+        jSplitPane9.setRightComponent(amplitudeHistory);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(splitter, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSplitPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE))
+                    .addComponent(jSplitPane8))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSplitPane9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(splitter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSplitPane8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(118, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Lines", jPanel3);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 554, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
         );
 
         pack();
@@ -238,43 +389,97 @@ public class GUI extends javax.swing.JFrame {
         ScopeLite.scopeLite.gui = null;
     }//GEN-LAST:event_formWindowClosing
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void ChangeBarColorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ChangeBarColorButtonActionPerformed
         // TODO add your handling code here:
-        
-    }//GEN-LAST:event_jButton1ActionPerformed
+        barColorChooser.setColor(scopelite.ScopeLite.drawer.getBarColor());
+        colorDialog.pack();
+        colorDialog.setVisible(true);
+    }//GEN-LAST:event_ChangeBarColorButtonActionPerformed
 
     private void colorDialogCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorDialogCancelActionPerformed
         // TODO add your handling code here:
-        colorDialog.dispose();
+        colorDialog.setVisible(false);
     }//GEN-LAST:event_colorDialogCancelActionPerformed
 
     private void colorDialogOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorDialogOkActionPerformed
         // TODO add your handling code here:
         scopelite.ScopeLite.drawer.setBarColor(barColorChooser.getColor());
         viewBarColor.setBackground(scopelite.ScopeLite.drawer.getBarColor());
-        colorDialog.dispose();
+        colorDialog.setVisible(false);
     }//GEN-LAST:event_colorDialogOkActionPerformed
 
+    private void barSensitivityStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_barSensitivityStateChanged
+        // TODO add your handling code here:
+        scopelite.ScopeLite.drawer.barSensitivity = ((SpinnerNumberModel)barSensitivity.getModel()).getNumber().doubleValue();
+    }//GEN-LAST:event_barSensitivityStateChanged
+
+    private void lineThicknessStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_lineThicknessStateChanged
+        // TODO add your handling code here:
+        scopelite.ScopeLite.drawer.lineThickness = ((SpinnerNumberModel)lineThickness.getModel()).getNumber().intValue();
+    }//GEN-LAST:event_lineThicknessStateChanged
+
+    private void lineAmplifyStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_lineAmplifyStateChanged
+        // TODO add your handling code here:
+        scopelite.ScopeLite.amplitudeModifierFactor = lineAmplify.getValue() / 100.0f;
+    }//GEN-LAST:event_lineAmplifyStateChanged
+
+    private void amplitudeHistoryStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_amplitudeHistoryStateChanged
+        // TODO add your handling code here:
+        scopelite.ScopeLite.drawer.samplesPerLongScope = ((SpinnerNumberModel)amplitudeHistory.getModel()).getNumber().intValue();
+    }//GEN-LAST:event_amplitudeHistoryStateChanged
+
+    private void maxFpsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_maxFpsStateChanged
+        // TODO add your handling code here:
+        scopelite.ScopeLite.maxFps = ((SpinnerNumberModel)maxFps.getModel()).getNumber().intValue();
+    }//GEN-LAST:event_maxFpsStateChanged
+
+    private void barMaxFrequencyStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_barMaxFrequencyStateChanged
+        // TODO add your handling code here:
+        scopelite.ScopeLite.drawer.modifyBar(((SpinnerNumberModel)barMaxFrequency.getModel()).getNumber().intValue() 
+                - scopelite.ScopeLite.drawer.getMaxBarFreq(), 0);
+        barMaxFrequency.setValue(scopelite.ScopeLite.drawer.getMaxBarFreq());
+    }//GEN-LAST:event_barMaxFrequencyStateChanged
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ChangeBarColorButton;
+    private javax.swing.JSpinner amplitudeHistory;
     private javax.swing.JSpinner barAmount;
     private javax.swing.JColorChooser barColorChooser;
+    private javax.swing.JSpinner barMaxFrequency;
+    private javax.swing.JSpinner barSensitivity;
     private javax.swing.JDialog colorDialog;
     private javax.swing.JButton colorDialogCancel;
     private javax.swing.JButton colorDialogOk;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JSplitPane jSplitPane10;
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JSplitPane jSplitPane3;
     private javax.swing.JSplitPane jSplitPane4;
     private javax.swing.JSplitPane jSplitPane5;
+    private javax.swing.JSplitPane jSplitPane6;
+    private javax.swing.JSplitPane jSplitPane7;
+    private javax.swing.JSplitPane jSplitPane8;
+    private javax.swing.JSplitPane jSplitPane9;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JSlider lineAmplify;
+    private javax.swing.JSpinner lineThickness;
+    private javax.swing.JSpinner maxFps;
     private javax.swing.JList soundDeviceSelection;
+    private javax.swing.JSplitPane splitter;
     private javax.swing.JPanel viewBarColor;
     // End of variables declaration//GEN-END:variables
 }

@@ -142,7 +142,7 @@ public class SoundCapturer extends GetX implements Runnable {
         thread = new Thread(this);
         thread.setName("Sound Capturer");
         thread.setDaemon(true);
-        thread.setPriority(6);
+        thread.setPriority(7);
         thread.start();
         
     }

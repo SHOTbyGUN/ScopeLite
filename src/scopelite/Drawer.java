@@ -21,11 +21,12 @@ public class Drawer extends GetX implements Runnable {
     public int samplesPerLongScope = 50, samplesPerLongScopeDefault = samplesPerLongScope;
     
     private boolean keepRunning = true;
-    private DeltaTime deltaTime;
+    private DeltaTime deltaTime, deltaTimeBG;
     private StatisticCounter bufferStat;
     private StatisticCounter readStat;
     private StatisticCounter fpsStat;
-    private long delta;
+    private StatisticCounter fpsBGStat;
+    private long delta, deltaBG;
     private AtomicIntegerArray dataLeft, dataRight;
     private AtomicIntegerArray dataLow, dataMid, dataHigh;
     //private int xRunner;
@@ -64,7 +65,7 @@ public class Drawer extends GetX implements Runnable {
     private int barAmount = 200, barAmountDefault = barAmount;
     private int barFreq = 512, barFreqDefault = barFreq;
     private int barMaxSpot = 678, barMaxSpotDefault = barMaxSpot;
-    public double barSensitivity = 5.0d, barSensitivityDefault = 5.0d;
+    public double barSensitivity = 4.0d, barSensitivityDefault = barSensitivity;
     public int redBarId = -1;
     /*
     public int barColorRed = 200, barColorRedDefault = barColorRed;
@@ -183,6 +184,9 @@ public class Drawer extends GetX implements Runnable {
                 
                 
                 while (keepRunning) {
+                    
+                    deltaBG = deltaTimeBG.getDelta();
+                    
                     try {
                         // Pre calculate amplitude history
                         
@@ -249,9 +253,11 @@ public class Drawer extends GetX implements Runnable {
         
         keepRunning = true;
         deltaTime = new DeltaTime(true);
+        deltaTimeBG = new DeltaTime(true);
         bufferStat = new StatisticCounter(100);
         readStat = new StatisticCounter(100);
         fpsStat = new StatisticCounter(10);
+        fpsBGStat = new StatisticCounter(10);
         
         dataLeft = ScopeLite.soundCapturer.channelsData.get(0);
         dataRight = ScopeLite.soundCapturer.channelsData.get(1);
@@ -379,12 +385,14 @@ public class Drawer extends GetX implements Runnable {
                             bufferStat.setValue(ScopeLite.soundCapturer.buffer);
                             readStat.setValue((int)ScopeLite.soundCapturer.delta);
                             fpsStat.setValue((int)(1000000000 / delta));
+                            fpsBGStat.setValue((int)(1000000000 / deltaBG));
 
                             g.drawString("Draw FPS: " + fpsStat.getAverage()
                                     + " Reads: " + 1000000000 / readStat.getAverage()
                                     + " buffer min: " + bufferStat.getMin() 
                                     + " max: " + bufferStat.getMax()
-                                    + " of " + ScopeLite.soundCapturer.getBufferSize(), 0, 10);
+                                    + " of " + ScopeLite.soundCapturer.getBufferSize()
+                                    + " pre-processor: " + fpsBGStat.getAverage(), 0, 10);
                             // Draw Menu
                             //g.drawString(InputListener.currentMenu.get(InputListener.currentMenuIndex).toString(), 
                             //        ScopeLite.screenWidth / 3, 10);
@@ -404,7 +412,7 @@ public class Drawer extends GetX implements Runnable {
                         }
 
                         g.setColor(Color.GRAY);
-                        g.drawString("H for help - Copyright © 2012 Teemu Kauhanen - v1.7", ScopeLite.screenWidth - 310, ScopeLite.canvas.getHeight() - 5);
+                        g.drawString("H for help - Copyright © 2012 Teemu Kauhanen - v1.8", ScopeLite.screenWidth - 310, ScopeLite.canvas.getHeight() - 5);
 
                         //ScopeLite.mainFrame.repaint();
 
