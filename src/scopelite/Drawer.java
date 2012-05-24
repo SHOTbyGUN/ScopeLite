@@ -8,7 +8,6 @@ import common.DeltaTime;
 import common.IntCache;
 import common.StatisticCounter;
 import edu.emory.mathcs.jtransforms.fft.DoubleFFT_1D;
-import edu.emory.mathcs.jtransforms.fft.FloatFFT_1D;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.concurrent.atomic.AtomicIntegerArray;
@@ -426,7 +425,7 @@ public class Drawer extends GetX implements Runnable {
                         }
 
                         g.setColor(Color.GRAY);
-                        g.drawString("H for help - Copyright © 2012 Teemu Kauhanen - v1.8", ScopeLite.screenWidth - 310, ScopeLite.canvas.getHeight() - 5);
+                        g.drawString("H for help - Copyright © 2012 Teemu Kauhanen - v1.9", ScopeLite.screenWidth - 310, ScopeLite.canvas.getHeight() - 5);
 
                         //ScopeLite.mainFrame.repaint();
 
