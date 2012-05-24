@@ -22,6 +22,8 @@ public class ScopeLite {
     public static SoundCapturer soundCapturer;
     public static SignalModifier signalModifier;
     public static GUI gui;
+    public static JFrame errorForm;
+    public static TextArea errorText;
     
     // PUBLIC STATIC VARIABLES
     
@@ -32,9 +34,9 @@ public class ScopeLite {
     public static JFrame mainFrame;
     public static BufferStrategy strategy;
     public static InputListener inputListener;
-    public static int maxScreenWidth = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width * 2;;
-    public static int screenWidth = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width / 2;
-    public static int screenHeight = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height / 2;
+    public static int maxScreenWidth = graphicsDevice.getDefaultConfiguration().getBounds().width * 2;
+    public static int screenWidth = graphicsDevice.getDefaultConfiguration().getBounds().width / 2;
+    public static int screenHeight = graphicsDevice.getDefaultConfiguration().getBounds().height / 2;
     
     // Live modified values
     //public static int samplesPerPixel = 10, samplesPerPixelDefault = 10;
@@ -48,11 +50,8 @@ public class ScopeLite {
         "h - help", 
         "g - show menu",
         "f - show fps",
-        "space - pause",
-        "arrows - move in menu",
-        "[+/-] - change menu values",
-        "d - reset menu value",
         "r - reset scope",
+        "space - pause",
         "esc - exit",
         "press and hold mouse to see selected bar's indicated frequency",
         "double click mouse to toggle fullscreen",
@@ -91,7 +90,7 @@ public class ScopeLite {
             mainFrame.setResizable(false);
             mainFrame.setPreferredSize(new Dimension(screenWidth * 2,screenHeight * 2));
         } else {
-            mainFrame.setPreferredSize(new Dimension(GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width / 2,GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height / 2));
+            mainFrame.setPreferredSize(new Dimension(screenWidth,screenHeight));
             mainFrame.setResizable(true);
         }
         
@@ -137,22 +136,27 @@ public class ScopeLite {
     }
     
     public void showError(String message, Exception exception) {
-        JFrame form = new JFrame("Error");
-        TextArea text = new TextArea();
-        form.getContentPane().add(text);
+        if(errorForm == null) {
+            // First time error
+            errorForm = new JFrame("Error");
+            errorText = new TextArea();
+            errorForm.getContentPane().add(errorText);
+            errorForm.pack();
+        }
         
-        text.append(message);
-        text.append("\n\n");
+        errorText.append(message);
+        errorText.append("\n\n");
         if(exception != null) {
-            text.append(exception.getMessage());
-            text.append("\n\n");
+            errorText.append(exception.getMessage());
+            errorText.append("\n\n");
             for(StackTraceElement stack : exception.getStackTrace()) {
-                text.append(stack.toString() + "\n");
+                errorText.append(stack.toString() + "\n");
             }
         }
         
-        form.pack();
-        form.setVisible(true);
+        if(!errorForm.isVisible())
+            errorForm.setVisible(true);
+        
     }
     
 }

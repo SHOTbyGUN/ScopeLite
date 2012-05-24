@@ -46,6 +46,7 @@ public class GUI extends javax.swing.JFrame {
         jSplitPane10 = new javax.swing.JSplitPane();
         jLabel10 = new javax.swing.JLabel();
         maxFps = new javax.swing.JSpinner();
+        restartButton = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jSplitPane2 = new javax.swing.JSplitPane();
         jLabel2 = new javax.swing.JLabel();
@@ -157,6 +158,13 @@ public class GUI extends javax.swing.JFrame {
         });
         jSplitPane10.setRightComponent(maxFps);
 
+        restartButton.setText("  Restart  ");
+        restartButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                restartButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -167,7 +175,8 @@ public class GUI extends javax.swing.JFrame {
                     .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jSplitPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(restartButton)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -176,7 +185,9 @@ public class GUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSplitPane10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSplitPane10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(restartButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -201,7 +212,6 @@ public class GUI extends javax.swing.JFrame {
         jSplitPane4.setLeftComponent(jLabel3);
 
         viewBarColor.setBackground(scopelite.ScopeLite.drawer.getBarColor());
-        viewBarColor.setMinimumSize(new java.awt.Dimension(10, 10));
         viewBarColor.setPreferredSize(new java.awt.Dimension(20, 20));
 
         javax.swing.GroupLayout viewBarColorLayout = new javax.swing.GroupLayout(viewBarColor);
@@ -281,7 +291,7 @@ public class GUI extends javax.swing.JFrame {
                         .addComponent(jSplitPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSplitPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(112, Short.MAX_VALUE))
+                .addContainerGap(113, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Bars", jPanel2);
@@ -352,7 +362,7 @@ public class GUI extends javax.swing.JFrame {
                     .addComponent(splitter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSplitPane8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(118, Short.MAX_VALUE))
+                .addContainerGap(119, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Lines", jPanel3);
@@ -365,7 +375,7 @@ public class GUI extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1)
         );
 
         pack();
@@ -440,6 +450,11 @@ public class GUI extends javax.swing.JFrame {
         barMaxFrequency.setValue(scopelite.ScopeLite.drawer.getMaxBarFreq());
     }//GEN-LAST:event_barMaxFrequencyStateChanged
 
+    private void restartButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restartButtonActionPerformed
+        // TODO add your handling code here:
+        scopelite.ScopeLite.soundCapturer.restart();
+    }//GEN-LAST:event_restartButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ChangeBarColorButton;
     private javax.swing.JSpinner amplitudeHistory;
@@ -478,6 +493,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JSlider lineAmplify;
     private javax.swing.JSpinner lineThickness;
     private javax.swing.JSpinner maxFps;
+    private javax.swing.JButton restartButton;
     private javax.swing.JList soundDeviceSelection;
     private javax.swing.JSplitPane splitter;
     private javax.swing.JPanel viewBarColor;

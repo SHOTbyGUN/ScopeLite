@@ -72,6 +72,13 @@ public class SoundCapturer extends GetX implements Runnable {
     }
     
     public void restart() {
+        if(restarting) {
+            ScopeLite.scopeLite.showError("Already restarting", null);
+            return;
+        } else {
+           restarting = true;
+        } 
+        
         ScopeLite.drawer.stop();
         
         if(keepRunning) {
@@ -87,6 +94,7 @@ public class SoundCapturer extends GetX implements Runnable {
             start();
         
         ScopeLite.drawer.start();
+        restarting = false;
     }
     
     public int getBitRate() {
@@ -142,7 +150,7 @@ public class SoundCapturer extends GetX implements Runnable {
         thread = new Thread(this);
         thread.setName("Sound Capturer");
         thread.setDaemon(true);
-        thread.setPriority(7);
+        thread.setPriority(5);
         thread.start();
         
     }

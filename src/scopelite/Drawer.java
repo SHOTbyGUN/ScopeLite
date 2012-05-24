@@ -237,6 +237,9 @@ public class Drawer extends GetX implements Runnable {
                         
                     } catch (Exception ex) {
                         ScopeLite.scopeLite.showError("Error in Drawer worker thread", ex);
+                        //System.out.println(ex.toString());
+                        
+                        ex.printStackTrace();
                     }
                 }
             }

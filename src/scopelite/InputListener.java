@@ -93,15 +93,16 @@ public class InputListener implements KeyListener, MouseListener {
                     currentMenu = currentMenu.getTopItem();
                 break;
                 
-            case 72:  // H
-                ScopeLite.showHelp = !ScopeLite.showHelp;
-                break;
-                
             case 68:  // D
                 currentMenu.resetDefault();
                 break;
                 
                 */
+            
+            case 72:  // H
+                ScopeLite.showHelp = !ScopeLite.showHelp;
+                break;
+                
                 
             case 71:  // G
                 //ScopeLite.showGui = !ScopeLite.showGui;
