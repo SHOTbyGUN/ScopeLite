@@ -31,7 +31,7 @@ public class SoundCapturer extends GetX implements Runnable {
     private DeltaTime deltaTime;
     private boolean restarting = false;
     
-    private int bitRate = 16, channels = 2, herz = 48000, bytesPerChannel;
+    private int bitRate = 16, channels = 2, herz = 44100, bytesPerChannel;
     private int localBufferSize = 100000; // xRunner pool
     private int lineBufferSize;
     private int value;
@@ -150,7 +150,7 @@ public class SoundCapturer extends GetX implements Runnable {
         thread = new Thread(this);
         thread.setName("Sound Capturer");
         thread.setDaemon(true);
-        thread.setPriority(5);
+        thread.setPriority(6);
         thread.start();
         
     }
@@ -180,7 +180,8 @@ public class SoundCapturer extends GetX implements Runnable {
             //line = (TargetDataLine) AudioSystem.getLine(info);
             line = (TargetDataLine) AudioSystem.getMixer(mixers.get(currentMixer)).getLine(info);
             
-            line.open(format, format.getFrameSize() * (int)format.getSampleRate() / 20);
+            //line.open(format, format.getFrameSize() * (int)format.getSampleRate() / 10);
+            line.open(format, 7000);
         } catch (LineUnavailableException ex) { 
             //System.out.println("Unable to open the line: " + ex);
             ScopeLite.scopeLite.showError("Unable to open the line", ex);
@@ -194,8 +195,8 @@ public class SoundCapturer extends GetX implements Runnable {
             return;
         }
 
-        //int readSize = format.getFrameSize();
-        int readSize = format.getFrameSize() * (line.getBufferSize() / 4000);
+        int readSize = format.getFrameSize() * 3;
+        //int readSize = format.getFrameSize() * (line.getBufferSize() / 4000);
         byte[] data = new byte[readSize];
         int numBytesRead;
         
@@ -224,45 +225,73 @@ public class SoundCapturer extends GetX implements Runnable {
             
             buffer = line.available();
             
-            if((numBytesRead = line.read(data, 0, readSize)) == -1) {
-                keepRunning = false;
-                System.out.println("Cannot read from line, Bytes read: " + numBytesRead 
-                        + " BufferSize:" + line.getBufferSize());
-                break;
+            if(buffer < readSize)
+            {
+                try 
+                {
+                    Thread.sleep(5);
+                }
+                catch (Exception ex)
+                {
+                    ex.printStackTrace();
+                }
             }
-            if(!isPaused) {
-                for(i = 0; i < data.length; i++) {
-                    newByte[bytePointer] = data[i];
-                    if(bytePointer >= bytesPerChannel - 1) {
-                        value = (new BigInteger(newByte).intValue());
-                        channelsData.get(channelPointer).set(xRunner, value);
-                        channelPointer++;
-                        bytePointer = 0;
-                    } else {
-                        bytePointer++;
+            else
+            {
+                
+                if(buffer < lineBufferSize / 10)
+                {
+                    try 
+                    {
+                        Thread.sleep(1);
                     }
-                    if(channelPointer >= channels) {
-                        // Calculate lowPass midPass highPass filtered data combined from all channels
-                        
-                        lowPass = (channelsData.get(0).get(getX(0)) + channelsData.get(1).get(getX(0)) + lastLowPass * 100) / 102;
-                        midPass = (channelsData.get(0).get(getX(-midPassAdjust)) + channelsData.get(1).get(getX(-midPassAdjust))) / 2 - lowPass;
-                        midPass = (midPass + (lastMidPass * 3)) / 4;
-                        highPass = (channelsData.get(0).get(getX(-highPassAdjust)) + channelsData.get(1).get(getX(-highPassAdjust))) / 2 - lowPass - midPass;
+                    catch (Exception ex)
+                    {
+                        ex.printStackTrace();
+                    }
+                }
+                
+                //System.out.println(buffer);
+                if((numBytesRead = line.read(data, 0, readSize)) == -1) {
+                    keepRunning = false;
+                    System.out.println("Cannot read from line, Bytes read: " + numBytesRead 
+                            + " BufferSize:" + line.getBufferSize());
+                    break;
+                }
+                if(!isPaused) {
+                    for(i = 0; i < data.length; i++) {
+                        newByte[bytePointer] = data[i];
+                        if(bytePointer >= bytesPerChannel - 1) {
+                            value = (new BigInteger(newByte).intValue());
+                            channelsData.get(channelPointer).set(xRunner, value);
+                            channelPointer++;
+                            bytePointer = 0;
+                        } else {
+                            bytePointer++;
+                        }
+                        if(channelPointer >= channels) {
+                            // Calculate lowPass midPass highPass filtered data combined from all channels
 
-                        lastMidPass = midPass;
-                        lastHighPass = highPass;
-                        lastLowPass = lowPass;
-                        
-                        dataLow.set(xRunner, lowPass);
-                        dataMid.set(xRunner, midPass);
-                        dataHigh.set(xRunner, highPass);
-                        
-                        if(++xRunner >= localBufferSize)
-                            xRunner = 0;
-                        bytePointer = 0;
-                        channelPointer = 0;
-                        
-                        //line.flush();
+                            lowPass = (channelsData.get(0).get(getX(0)) + channelsData.get(1).get(getX(0)) + lastLowPass * 100) / 102;
+                            midPass = (channelsData.get(0).get(getX(-midPassAdjust)) + channelsData.get(1).get(getX(-midPassAdjust))) / 2 - lowPass;
+                            midPass = (midPass + (lastMidPass * 3)) / 4;
+                            highPass = (channelsData.get(0).get(getX(-highPassAdjust)) + channelsData.get(1).get(getX(-highPassAdjust))) / 2 - lowPass - midPass;
+
+                            lastMidPass = midPass;
+                            lastHighPass = highPass;
+                            lastLowPass = lowPass;
+
+                            dataLow.set(xRunner, lowPass);
+                            dataMid.set(xRunner, midPass);
+                            dataHigh.set(xRunner, highPass);
+
+                            if(++xRunner >= localBufferSize)
+                                xRunner = 0;
+                            bytePointer = 0;
+                            channelPointer = 0;
+
+                            //line.flush();
+                        }
                     }
                 }
             }

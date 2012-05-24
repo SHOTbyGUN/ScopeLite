@@ -37,6 +37,8 @@ public class ScopeLite {
     public static int maxScreenWidth = graphicsDevice.getDefaultConfiguration().getBounds().width * 2;
     public static int screenWidth = graphicsDevice.getDefaultConfiguration().getBounds().width / 2;
     public static int screenHeight = graphicsDevice.getDefaultConfiguration().getBounds().height / 2;
+    public static final int defaultScreenWidth = screenWidth;
+    public static final int defaultScreenHeight = screenHeight;
     
     // Live modified values
     //public static int samplesPerPixel = 10, samplesPerPixelDefault = 10;
@@ -88,9 +90,9 @@ public class ScopeLite {
         if(fullscreen) {
             mainFrame.setUndecorated(true);
             mainFrame.setResizable(false);
-            mainFrame.setPreferredSize(new Dimension(screenWidth * 2,screenHeight * 2));
+            mainFrame.setPreferredSize(new Dimension(defaultScreenHeight * 2,defaultScreenHeight * 2));
         } else {
-            mainFrame.setPreferredSize(new Dimension(screenWidth,screenHeight));
+            mainFrame.setPreferredSize(new Dimension(defaultScreenWidth,defaultScreenHeight));
             mainFrame.setResizable(true);
         }
         

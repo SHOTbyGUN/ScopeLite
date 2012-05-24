@@ -7,6 +7,8 @@ package scopelite;
 import common.DeltaTime;
 import common.IntCache;
 import common.StatisticCounter;
+import edu.emory.mathcs.jtransforms.fft.DoubleFFT_1D;
+import edu.emory.mathcs.jtransforms.fft.FloatFFT_1D;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.concurrent.atomic.AtomicIntegerArray;
@@ -65,7 +67,7 @@ public class Drawer extends GetX implements Runnable {
     private int barAmount = 200, barAmountDefault = barAmount;
     private int barFreq = 512, barFreqDefault = barFreq;
     private int barMaxSpot = 678, barMaxSpotDefault = barMaxSpot;
-    public double barSensitivity = 4.0d, barSensitivityDefault = barSensitivity;
+    public double barSensitivity = 2.0d, barSensitivityDefault = barSensitivity;
     public int redBarId = -1;
     /*
     public int barColorRed = 200, barColorRedDefault = barColorRed;
@@ -180,7 +182,11 @@ public class Drawer extends GetX implements Runnable {
                 
                 int i;
                 
-                FFT fft = new FFT();
+                // Old working FFT class
+                //FFT fft = new FFT();
+                
+                // New JTransforms FFT
+                DoubleFFT_1D fft = new DoubleFFT_1D(dataPool.length / 2);
                 
                 
                 while (keepRunning) {
@@ -224,7 +230,12 @@ public class Drawer extends GetX implements Runnable {
                             dataPool[i] = (ScopeLite.soundCapturer.channelsData.get(0).get(getX(i))
                                     + ScopeLite.soundCapturer.channelsData.get(1).get(getX(i))) / ScopeLite.soundCapturer.getMaxValue();
                         }
-                        dataPool = fft.four1(dataPool, dataPool.length / 4, 1);
+                        
+                        // Old FFT
+                        //dataPool = fft.four1(dataPool, dataPool.length / 4, 1);
+                        
+                        // New FFT
+                        fft.realForwardFull(dataPool);
                         
                         for(i = 0; i < dataPool.length / 2; i++) {
                             spectrogram[i] = java.lang.Math.sqrt(dataPool[i]*dataPool[i] + dataPool[i+dataPool.length/2] * dataPool[i+dataPool.length/2]);
@@ -233,7 +244,7 @@ public class Drawer extends GetX implements Runnable {
                         
                         
                         
-                        Thread.sleep(1);
+                        Thread.sleep(3);
                         
                     } catch (Exception ex) {
                         ScopeLite.scopeLite.showError("Error in Drawer worker thread", ex);
