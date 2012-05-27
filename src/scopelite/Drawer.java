@@ -20,6 +20,7 @@ public class Drawer extends GetX implements Runnable {
     
     public Thread thread;
     public int samplesPerLongScope = 50, samplesPerLongScopeDefault = samplesPerLongScope;
+    //public static VolatileImage vi, volatileImage = ScopeLite.getCurrentGraphicsDevice().getDefaultConfiguration().createCompatibleVolatileImage(ScopeLite.screenWidth, ScopeLite.screenHeight);
     
     private boolean keepRunning = true;
     private DeltaTime deltaTime, deltaTimeBG;
@@ -31,7 +32,7 @@ public class Drawer extends GetX implements Runnable {
     private AtomicIntegerArray dataLeft, dataRight;
     private AtomicIntegerArray dataLow, dataMid, dataHigh;
     //private int xRunner;
-    private Graphics2D g;
+    private Graphics2D g, bufferGraphics;
     private int x, max = 0, value, absolute, num;
     private int lineOffset = 0;
     private int lineHeight = 0;
@@ -66,7 +67,7 @@ public class Drawer extends GetX implements Runnable {
     private int barAmount = 200, barAmountDefault = barAmount;
     private int barFreq = 512, barFreqDefault = barFreq;
     private int barMaxSpot = 678, barMaxSpotDefault = barMaxSpot;
-    public double barSensitivity = 2.0d, barSensitivityDefault = barSensitivity;
+    public double barSensitivity = 3.0d, barSensitivityDefault = barSensitivity;
     public int redBarId = -1;
     /*
     public int barColorRed = 200, barColorRedDefault = barColorRed;
@@ -89,13 +90,14 @@ public class Drawer extends GetX implements Runnable {
         return barColor;
     }
     
-    public void modifyBar(int barFreqMod, int barAmountMod) {
+    public int modifyBar(int barFreqMod, int barAmountMod) {
         int newBarMaxSpot = (int)((barFreq + barFreqMod) * java.lang.Math.log10(21))+2;
         if(newBarMaxSpot < spectrogram.length / 1.2 && barAmount + barAmountMod > 1 && barFreq + barFreqMod > 1) {
             barFreq += barFreqMod;
             barAmount += barAmountMod;
             barMaxSpot = newBarMaxSpot;
         }
+        return barMaxSpot;
     }
     
     public void resetBarSettings() {
@@ -123,6 +125,10 @@ public class Drawer extends GetX implements Runnable {
     
     public int getSpot(int i) {
         return (int)(barMaxSpot - java.lang.Math.log10(20.0d/barAmount*i+1) * barFreq);
+    }
+    
+    public int getBarFrequencyModifier() {
+        return barFreq;
     }
     
     
@@ -267,7 +273,7 @@ public class Drawer extends GetX implements Runnable {
         keepRunning = true;
         deltaTime = new DeltaTime(true);
         deltaTimeBG = new DeltaTime(true);
-        bufferStat = new StatisticCounter(100);
+        bufferStat = new StatisticCounter(10);
         readStat = new StatisticCounter(100);
         fpsStat = new StatisticCounter(10);
         fpsBGStat = new StatisticCounter(10);
@@ -289,10 +295,10 @@ public class Drawer extends GetX implements Runnable {
             
             try {
                 
-                if(lastHeight != ScopeLite.canvas.getHeight()) {
-                    lastHeight = ScopeLite.canvas.getHeight();
-                    lineHeight = ScopeLite.canvas.getHeight() / 6;
-                    lineOffset = ScopeLite.canvas.getHeight() / 20;
+                if(lastHeight != ScopeLite.screenHeight) {
+                    lastHeight = ScopeLite.screenHeight;
+                    lineHeight = ScopeLite.screenHeight / 6;
+                    lineOffset = ScopeLite.screenHeight / 20;
                     highOffset = lineHeight - lineOffset;
                     midOffset = lineHeight * 2 - lineOffset;
                     lowOffset = lineHeight * 3 - lineOffset;
@@ -306,9 +312,11 @@ public class Drawer extends GetX implements Runnable {
                         xRunner = ScopeLite.soundCapturer.xRunner;
 
                         g = (Graphics2D) ScopeLite.strategy.getDrawGraphics();
-
+                        //vi = volatileImage;
+                        //g = vi.createGraphics();
+                        
                         g.setColor(Color.BLACK);
-                        g.fillRect(0,0,ScopeLite.screenWidth, ScopeLite.canvas.getHeight());
+                        g.fillRect(0,0,ScopeLite.screenWidth, ScopeLite.screenHeight);
                             
                             barWidth = 1.0d * ScopeLite.screenWidth / barAmount;
                             if(barWidth < 2) {
@@ -324,8 +332,8 @@ public class Drawer extends GetX implements Runnable {
                                 else
                                     g.setColor(barColor);
                                 
-                                g.fillRect((int)(barWidth * i), ScopeLite.canvas.getHeight() - (int)(java.lang.Math.log10(spectrogram[getSpot(barAmount-i)] / barSensitivity) / 8 * ScopeLite.amplitudeModifierFactor * ScopeLite.screenHeight), 
-                                        (int)(barWidth - barBorder), ScopeLite.canvas.getHeight());
+                                g.fillRect((int)(barWidth * i), ScopeLite.screenHeight - (int)(java.lang.Math.log10(spectrogram[getSpot(barAmount-i)] / barSensitivity) / 8 * ScopeLite.amplitudeModifierFactor * ScopeLite.screenHeight), 
+                                        (int)(barWidth - barBorder), ScopeLite.screenHeight);
                             }
                         
                             for(lineThicknessLoop = 0; lineThicknessLoop < lineThickness; lineThicknessLoop++) {
@@ -403,6 +411,7 @@ public class Drawer extends GetX implements Runnable {
                             g.drawString("Draw FPS: " + fpsStat.getAverage()
                                     + " Reads: " + 1000000000 / readStat.getAverage()
                                     + " buffer min: " + bufferStat.getMin() 
+                                    + " avg: " + bufferStat.getAverage() 
                                     + " max: " + bufferStat.getMax()
                                     + " of " + ScopeLite.soundCapturer.getBufferSize()
                                     + " pre-processor: " + fpsBGStat.getAverage(), 0, 10);
@@ -425,16 +434,16 @@ public class Drawer extends GetX implements Runnable {
                         }
 
                         g.setColor(Color.GRAY);
-                        g.drawString("H for help - Copyright © 2012 Teemu Kauhanen - v1.9", ScopeLite.screenWidth - 310, ScopeLite.canvas.getHeight() - 5);
-
-                        //ScopeLite.mainFrame.repaint();
+                        g.drawString("H for help - Copyright © 2012 Teemu Kauhanen - v1.9", ScopeLite.screenWidth - 310, ScopeLite.screenHeight - 5);
 
                         g.dispose();
+                        
+                        //bufferGraphics.drawImage(vi, 0, 0, null);
+                        //bufferGraphics.dispose();
 
                     } while (ScopeLite.strategy.contentsRestored());
 
                     ScopeLite.strategy.show();
-
 
                 } while (ScopeLite.strategy.contentsLost());
             

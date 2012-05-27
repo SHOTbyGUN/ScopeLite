@@ -31,10 +31,20 @@ public class BackgroundTasks implements Runnable {
             @Override
             public void run() {
                 
-                // Update screenWidth and screenHeight
-                ScopeLite.screenWidth = ScopeLite.mainFrame.getWidth();
-                ScopeLite.screenHeight = ScopeLite.mainFrame.getHeight();
-                
+                try {
+                    // Update screenWidth and screenHeight
+                    ScopeLite.screenWidth = ScopeLite.canvas.getWidth();
+                    ScopeLite.screenHeight = ScopeLite.canvas.getHeight();
+
+                    // New volatileImage if screen size changed
+                    /*
+                    if(scopelite.Drawer.volatileImage.getWidth() != ScopeLite.screenWidth || scopelite.Drawer.volatileImage.getHeight() != ScopeLite.screenHeight)
+                        scopelite.Drawer.volatileImage = ScopeLite.getCurrentGraphicsDevice().getDefaultConfiguration().createCompatibleVolatileImage(ScopeLite.screenWidth, ScopeLite.screenHeight);
+                        * 
+                        */
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         }, 100, 100);
     }

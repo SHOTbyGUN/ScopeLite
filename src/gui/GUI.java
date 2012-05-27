@@ -43,9 +43,6 @@ public class GUI extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         soundDeviceSelection = new javax.swing.JList();
-        jSplitPane10 = new javax.swing.JSplitPane();
-        jLabel10 = new javax.swing.JLabel();
-        maxFps = new javax.swing.JSpinner();
         restartButton = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jSplitPane2 = new javax.swing.JSplitPane();
@@ -58,10 +55,13 @@ public class GUI extends javax.swing.JFrame {
         ChangeBarColorButton = new javax.swing.JButton();
         jSplitPane6 = new javax.swing.JSplitPane();
         jLabel4 = new javax.swing.JLabel();
-        barMaxFrequency = new javax.swing.JSpinner();
+        barFrequencyModifier = new javax.swing.JSpinner();
         jSplitPane7 = new javax.swing.JSplitPane();
         jLabel5 = new javax.swing.JLabel();
         barSensitivity = new javax.swing.JSpinner();
+        jSplitPane11 = new javax.swing.JSplitPane();
+        jLabel11 = new javax.swing.JLabel();
+        barMaxFrequency = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         splitter = new javax.swing.JSplitPane();
         jLabel6 = new javax.swing.JLabel();
@@ -73,6 +73,15 @@ public class GUI extends javax.swing.JFrame {
         jSplitPane9 = new javax.swing.JSplitPane();
         jLabel9 = new javax.swing.JLabel();
         amplitudeHistory = new javax.swing.JSpinner();
+        jPanel4 = new javax.swing.JPanel();
+        jSplitPane12 = new javax.swing.JSplitPane();
+        jLabel12 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        displaySelection = new javax.swing.JList();
+        windowedMode = new javax.swing.JCheckBox();
+        jSplitPane10 = new javax.swing.JSplitPane();
+        jLabel10 = new javax.swing.JLabel();
+        maxFps = new javax.swing.JSpinner();
 
         colorDialogOk.setText("  OK  ");
         colorDialogOk.addActionListener(new java.awt.event.ActionListener() {
@@ -145,19 +154,6 @@ public class GUI extends javax.swing.JFrame {
 
         jSplitPane1.setRightComponent(jScrollPane1);
 
-        jLabel10.setFont(getFont());
-        jLabel10.setText("  Max fps  ");
-        jSplitPane10.setLeftComponent(jLabel10);
-
-        maxFps.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
-        maxFps.setValue(scopelite.ScopeLite.maxFps);
-        maxFps.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                maxFpsStateChanged(evt);
-            }
-        });
-        jSplitPane10.setRightComponent(maxFps);
-
         restartButton.setText("  Restart  ");
         restartButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -174,8 +170,7 @@ public class GUI extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jSplitPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(restartButton)))
                 .addContainerGap())
         );
@@ -185,13 +180,11 @@ public class GUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jSplitPane10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(restartButton))
+                .addComponent(restartButton)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("System", jPanel1);
+        jTabbedPane1.addTab("Input", jPanel1);
 
         jLabel2.setFont(getFont());
         jLabel2.setText("  Bar amount  ");
@@ -238,20 +231,20 @@ public class GUI extends javax.swing.JFrame {
         jSplitPane3.setRightComponent(ChangeBarColorButton);
 
         jLabel4.setFont(getFont());
-        jLabel4.setText("  Bar max frequency  ");
+        jLabel4.setText("  Bar frequency modifier  ");
         jSplitPane6.setLeftComponent(jLabel4);
 
-        barMaxFrequency.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
-        barMaxFrequency.setValue(scopelite.ScopeLite.drawer.getMaxBarFreq());
-        barMaxFrequency.addChangeListener(new javax.swing.event.ChangeListener() {
+        barFrequencyModifier.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        barFrequencyModifier.setValue(scopelite.ScopeLite.drawer.getBarFrequencyModifier());
+        barFrequencyModifier.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                barMaxFrequencyStateChanged(evt);
+                barFrequencyModifierStateChanged(evt);
             }
         });
-        jSplitPane6.setRightComponent(barMaxFrequency);
+        jSplitPane6.setRightComponent(barFrequencyModifier);
 
         jLabel5.setFont(getFont());
-        jLabel5.setText("  Bar sensitivity  ");
+        jLabel5.setText("  Bar insensitivity  ");
         jSplitPane7.setLeftComponent(jLabel5);
 
         barSensitivity.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(2.0d), Double.valueOf(0.2d), null, Double.valueOf(0.1d)));
@@ -263,19 +256,30 @@ public class GUI extends javax.swing.JFrame {
         });
         jSplitPane7.setRightComponent(barSensitivity);
 
+        jLabel11.setFont(getFont());
+        jLabel11.setText("  Bar max frequency  ");
+        jSplitPane11.setLeftComponent(jLabel11);
+
+        barMaxFrequency.setFont(getFont());
+        barMaxFrequency.setText(Integer.toString(scopelite.ScopeLite.drawer.getMaxBarFreq()));
+        jSplitPane11.setRightComponent(barMaxFrequency);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jSplitPane2)
-                    .addComponent(jSplitPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSplitPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
-                    .addComponent(jSplitPane7))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jSplitPane2)
+                            .addComponent(jSplitPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSplitPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
+                            .addComponent(jSplitPane7)))
+                    .addComponent(jSplitPane11))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -291,7 +295,9 @@ public class GUI extends javax.swing.JFrame {
                         .addComponent(jSplitPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSplitPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(113, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSplitPane11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(88, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Bars", jPanel2);
@@ -313,7 +319,7 @@ public class GUI extends javax.swing.JFrame {
         splitter.setRightComponent(lineThickness);
 
         jLabel8.setFont(getFont());
-        jLabel8.setText("  Line amplify  ");
+        jLabel8.setText("  Signal amplify  ");
         jSplitPane8.setLeftComponent(jLabel8);
 
         lineAmplify.setMaximum(1000);
@@ -367,6 +373,86 @@ public class GUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Lines", jPanel3);
 
+        jSplitPane12.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+
+        jLabel12.setFont(getFont());
+        jLabel12.setText("  Fullscreen display  ");
+        jSplitPane12.setLeftComponent(jLabel12);
+
+        displaySelection.setFont(getFont());
+        displaySelection.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = new String[scopelite.ScopeLite.graphicsDeviceList.length];
+            {
+                for(int i = 0; i < scopelite.ScopeLite.graphicsDeviceList.length; i++) {
+                    strings[i] = i + " " + scopelite.ScopeLite.graphicsDeviceList[i].getIDstring();
+                };
+            }
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        displaySelection.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        displaySelection.setToolTipText("");
+        displaySelection.setSelectedIndex(scopelite.ScopeLite.selectedGraphicsDevice);
+        displaySelection.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                displaySelectionValueChanged(evt);
+            }
+        });
+        jScrollPane2.setViewportView(displaySelection);
+
+        jSplitPane12.setRightComponent(jScrollPane2);
+
+        windowedMode.setSelected(scopelite.ScopeLite.windowedMode);
+        windowedMode.setText("Windowed mode");
+        windowedMode.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                windowedModeStateChanged(evt);
+            }
+        });
+
+        jLabel10.setFont(getFont());
+        jLabel10.setText("  Max fps  ");
+        jSplitPane10.setLeftComponent(jLabel10);
+
+        maxFps.setFont(getFont());
+        maxFps.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        maxFps.setValue(scopelite.ScopeLite.maxFps);
+        maxFps.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                maxFpsStateChanged(evt);
+            }
+        });
+        jSplitPane10.setRightComponent(maxFps);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(windowedMode)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 196, Short.MAX_VALUE)
+                        .addComponent(jSplitPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jSplitPane12, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addComponent(jSplitPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(windowedMode)
+                    .addComponent(jSplitPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(23, 23, 23))
+        );
+
+        jTabbedPane1.addTab("Display", jPanel4);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -392,6 +478,7 @@ public class GUI extends javax.swing.JFrame {
         scopelite.ScopeLite.drawer.modifyBar(0, 
                 ((SpinnerNumberModel)barAmount.getModel()).getNumber().intValue() 
                 - scopelite.ScopeLite.drawer.getBarAmount());
+        barMaxFrequency.setText(Integer.toString(scopelite.ScopeLite.drawer.getMaxBarFreq()));
     }//GEN-LAST:event_barAmountStateChanged
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -443,30 +530,54 @@ public class GUI extends javax.swing.JFrame {
         scopelite.ScopeLite.maxFps = ((SpinnerNumberModel)maxFps.getModel()).getNumber().intValue();
     }//GEN-LAST:event_maxFpsStateChanged
 
-    private void barMaxFrequencyStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_barMaxFrequencyStateChanged
+    private void barFrequencyModifierStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_barFrequencyModifierStateChanged
         // TODO add your handling code here:
-        scopelite.ScopeLite.drawer.modifyBar(((SpinnerNumberModel)barMaxFrequency.getModel()).getNumber().intValue() 
-                - scopelite.ScopeLite.drawer.getMaxBarFreq(), 0);
-        barMaxFrequency.setValue(scopelite.ScopeLite.drawer.getMaxBarFreq());
-    }//GEN-LAST:event_barMaxFrequencyStateChanged
+        
+        
+        scopelite.ScopeLite.drawer.modifyBar(
+            ((SpinnerNumberModel)barFrequencyModifier.getModel()).getNumber().intValue()
+                - scopelite.ScopeLite.drawer.getBarFrequencyModifier(), 0);
+        
+        barFrequencyModifier.setValue(scopelite.ScopeLite.drawer.getBarFrequencyModifier());
+        
+        barMaxFrequency.setText(Integer.toString(scopelite.ScopeLite.drawer.getMaxBarFreq()));
+        
+    }//GEN-LAST:event_barFrequencyModifierStateChanged
 
     private void restartButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restartButtonActionPerformed
         // TODO add your handling code here:
         scopelite.ScopeLite.soundCapturer.restart();
     }//GEN-LAST:event_restartButtonActionPerformed
 
+    private void windowedModeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_windowedModeStateChanged
+        // TODO add your handling code here:
+        if(windowedMode.getSelectedObjects() == null)
+            scopelite.ScopeLite.windowedMode = false;
+        else
+            scopelite.ScopeLite.windowedMode = true;
+    }//GEN-LAST:event_windowedModeStateChanged
+
+    private void displaySelectionValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_displaySelectionValueChanged
+        // TODO add your handling code here:
+        scopelite.ScopeLite.selectedGraphicsDevice = displaySelection.getSelectedIndex();
+    }//GEN-LAST:event_displaySelectionValueChanged
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ChangeBarColorButton;
     private javax.swing.JSpinner amplitudeHistory;
     private javax.swing.JSpinner barAmount;
     private javax.swing.JColorChooser barColorChooser;
-    private javax.swing.JSpinner barMaxFrequency;
+    private javax.swing.JSpinner barFrequencyModifier;
+    private javax.swing.JLabel barMaxFrequency;
     private javax.swing.JSpinner barSensitivity;
     private javax.swing.JDialog colorDialog;
     private javax.swing.JButton colorDialogCancel;
     private javax.swing.JButton colorDialogOk;
+    private javax.swing.JList displaySelection;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -478,9 +589,13 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane10;
+    private javax.swing.JSplitPane jSplitPane11;
+    private javax.swing.JSplitPane jSplitPane12;
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JSplitPane jSplitPane3;
     private javax.swing.JSplitPane jSplitPane4;
@@ -497,5 +612,6 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JList soundDeviceSelection;
     private javax.swing.JSplitPane splitter;
     private javax.swing.JPanel viewBarColor;
+    private javax.swing.JCheckBox windowedMode;
     // End of variables declaration//GEN-END:variables
 }

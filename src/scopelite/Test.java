@@ -18,5 +18,6 @@ public class Test {
         System.out.println(graphicsDevice.getDefaultConfiguration().getBounds().height);
         System.out.println(GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().width);
         System.out.println(GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().height);
+        System.out.println(GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getBounds().width);
     }
 }

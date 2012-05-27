@@ -8,6 +8,7 @@ import gui.GUI;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /**
  *
@@ -30,13 +31,16 @@ public class ScopeLite {
     public static boolean showFps = false;
     public static boolean showHelp = false;
     public static boolean fullscreen = false;
-    public static GraphicsDevice graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-    public static JFrame mainFrame;
+    public static boolean windowedMode = false;
+    public static GraphicsDevice[] graphicsDeviceList = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
+    //public static GraphicsDevice graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+    public static int selectedGraphicsDevice = 0;
+    private static JFrame mainFrame;
     public static BufferStrategy strategy;
     public static InputListener inputListener;
-    public static int maxScreenWidth = graphicsDevice.getDefaultConfiguration().getBounds().width * 2;
-    public static int screenWidth = graphicsDevice.getDefaultConfiguration().getBounds().width / 2;
-    public static int screenHeight = graphicsDevice.getDefaultConfiguration().getBounds().height / 2;
+    public static int maxScreenWidth = getMaxScreenWidth();
+    public static int screenWidth = getCurrentGraphicsDevice().getDefaultConfiguration().getBounds().width / 2;
+    public static int screenHeight = getCurrentGraphicsDevice().getDefaultConfiguration().getBounds().height / 2;
     public static final int defaultScreenWidth = screenWidth;
     public static final int defaultScreenHeight = screenHeight;
     
@@ -77,24 +81,28 @@ public class ScopeLite {
     
     public ScopeLite() {
         
-        mainFrame = new JFrame("Scope");
+        mainFrame = new JFrame(getCurrentGraphicsDevice().getDefaultConfiguration());
+        mainFrame.setTitle("Scope");
         canvas = new Canvas();
-        mainFrame.getContentPane().add(canvas);
+        mainFrame.add(canvas);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        canvas.setBounds(0,0,screenWidth * 3, screenHeight * 3);
         canvas.setIgnoreRepaint(true);
         mainFrame.setIgnoreRepaint(true);
         
         //toggleFullscreen
         if(fullscreen) {
+            mainFrame.setPreferredSize(new Dimension(getCurrentGraphicsDevice().getDefaultConfiguration().getBounds().width,
+                    getCurrentGraphicsDevice().getDefaultConfiguration().getBounds().height));
             mainFrame.setUndecorated(true);
             mainFrame.setResizable(false);
-            mainFrame.setPreferredSize(new Dimension(defaultScreenHeight * 2,defaultScreenHeight * 2));
         } else {
             mainFrame.setPreferredSize(new Dimension(defaultScreenWidth,defaultScreenHeight));
-            mainFrame.setResizable(true);
         }
+        
+        System.out.println("" + getCurrentGraphicsDevice().getDefaultConfiguration().getBounds().x
+                    + " " + getCurrentGraphicsDevice().getDefaultConfiguration().getBounds().y
+                    + " " + getCurrentGraphicsDevice().getDefaultConfiguration().getBounds().width
+                    + " " + getCurrentGraphicsDevice().getDefaultConfiguration().getBounds().height);
         
         mainFrame.pack();
         mainFrame.setVisible(true);
@@ -133,7 +141,10 @@ public class ScopeLite {
             fullscreen = true;
             mainFrame.dispose();
             scopeLite = new ScopeLite();
-            graphicsDevice.setFullScreenWindow(mainFrame);
+            
+            // Windowed mode
+            if(!windowedMode)
+                getCurrentGraphicsDevice().setFullScreenWindow(mainFrame);
         }
     }
     
@@ -159,6 +170,21 @@ public class ScopeLite {
         if(!errorForm.isVisible())
             errorForm.setVisible(true);
         
+    }
+    
+    private static int getMaxScreenWidth() {
+        
+        int maxWidth = 0;
+        
+        for(GraphicsDevice display : graphicsDeviceList) {
+            maxWidth += display.getDefaultConfiguration().getBounds().width;
+        }
+        
+        return maxWidth;
+    }
+    
+    public static GraphicsDevice getCurrentGraphicsDevice() {
+        return graphicsDeviceList[selectedGraphicsDevice];
     }
     
 }
