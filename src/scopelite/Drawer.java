@@ -20,7 +20,6 @@ public class Drawer extends GetX implements Runnable {
     
     public Thread thread;
     public int samplesPerLongScope = 50, samplesPerLongScopeDefault = samplesPerLongScope;
-    //public static VolatileImage vi, volatileImage = ScopeLite.getCurrentGraphicsDevice().getDefaultConfiguration().createCompatibleVolatileImage(ScopeLite.screenWidth, ScopeLite.screenHeight);
     
     private boolean keepRunning = true;
     private DeltaTime deltaTime, deltaTimeBG;
@@ -69,13 +68,8 @@ public class Drawer extends GetX implements Runnable {
     private int barMaxSpot = 678, barMaxSpotDefault = barMaxSpot;
     public double barSensitivity = 3.0d, barSensitivityDefault = barSensitivity;
     public int redBarId = -1;
-    /*
-    public int barColorRed = 200, barColorRedDefault = barColorRed;
-    public int barColorGreen = 120, barColorGreenDefault = barColorGreen;
-    public int barColorBlue = 70, barColorBlueDefault = barColorBlue;
-    * 
-    */
     private Color barColor = new Color(200, 120, 70);
+    //private Color barColor = new Color(102, 204, 200);
     
     // Line thickness
     public int lineThickness = 2;
@@ -312,8 +306,6 @@ public class Drawer extends GetX implements Runnable {
                         xRunner = ScopeLite.soundCapturer.xRunner;
 
                         g = (Graphics2D) ScopeLite.strategy.getDrawGraphics();
-                        //vi = volatileImage;
-                        //g = vi.createGraphics();
                         
                         g.setColor(Color.BLACK);
                         g.fillRect(0,0,ScopeLite.screenWidth, ScopeLite.screenHeight);
@@ -434,13 +426,10 @@ public class Drawer extends GetX implements Runnable {
                         }
 
                         g.setColor(Color.GRAY);
-                        g.drawString("H for help - Copyright © 2012 Teemu Kauhanen - v1.9", ScopeLite.screenWidth - 310, ScopeLite.screenHeight - 5);
+                        g.drawString("H for help - Copyright © 2012 Teemu Kauhanen - v1.10", ScopeLite.screenWidth - 310, ScopeLite.screenHeight - 5);
 
                         g.dispose();
                         
-                        //bufferGraphics.drawImage(vi, 0, 0, null);
-                        //bufferGraphics.dispose();
-
                     } while (ScopeLite.strategy.contentsRestored());
 
                     ScopeLite.strategy.show();

@@ -28,13 +28,18 @@ public class ScopeLite {
     
     // PUBLIC STATIC VARIABLES
     
+    // Display related
+    
     public static boolean showFps = false;
     public static boolean showHelp = false;
     public static boolean fullscreen = false;
     public static boolean windowedMode = false;
     public static GraphicsDevice[] graphicsDeviceList = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
-    //public static GraphicsDevice graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-    public static int selectedGraphicsDevice = 0;
+    private static int selectedGraphicsDevice = 0;
+    public static DisplayMode[] displayModeList = getCurrentGraphicsDevice().getDisplayModes();
+    public static DisplayMode selectedDisplayMode = null;
+    
+    // Window related
     private static JFrame mainFrame;
     public static BufferStrategy strategy;
     public static InputListener inputListener;
@@ -99,11 +104,6 @@ public class ScopeLite {
             mainFrame.setPreferredSize(new Dimension(defaultScreenWidth,defaultScreenHeight));
         }
         
-        System.out.println("" + getCurrentGraphicsDevice().getDefaultConfiguration().getBounds().x
-                    + " " + getCurrentGraphicsDevice().getDefaultConfiguration().getBounds().y
-                    + " " + getCurrentGraphicsDevice().getDefaultConfiguration().getBounds().width
-                    + " " + getCurrentGraphicsDevice().getDefaultConfiguration().getBounds().height);
-        
         mainFrame.pack();
         mainFrame.setVisible(true);
         
@@ -142,9 +142,19 @@ public class ScopeLite {
             mainFrame.dispose();
             scopeLite = new ScopeLite();
             
-            // Windowed mode
-            if(!windowedMode)
+            // If not windowed mode
+            if(!windowedMode) {
+                // Set mainFrame to fullscreen
                 getCurrentGraphicsDevice().setFullScreenWindow(mainFrame);
+            
+                // If displayMode is not null, set display mode to selected
+                if(selectedDisplayMode != null) {
+                    if(getCurrentGraphicsDevice().isDisplayChangeSupported())
+                        getCurrentGraphicsDevice().setDisplayMode(selectedDisplayMode);
+                    else
+                        showError("Cannot change display mode", null);
+                } 
+            }
         }
     }
     
@@ -186,5 +196,17 @@ public class ScopeLite {
     public static GraphicsDevice getCurrentGraphicsDevice() {
         return graphicsDeviceList[selectedGraphicsDevice];
     }
+    
+    public static int getSelectedGraphicsDevice() {
+        return selectedGraphicsDevice;
+    }
+    
+    public static void setSelectedGraphicsDevice(int i) {
+        selectedGraphicsDevice = i;
+        displayModeList = getCurrentGraphicsDevice().getDisplayModes();
+        selectedDisplayMode = null;
+    }
+    
+    
     
 }
