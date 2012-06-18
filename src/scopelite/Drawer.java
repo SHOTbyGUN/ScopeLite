@@ -27,11 +27,12 @@ public class Drawer extends GetX implements Runnable {
     private StatisticCounter readStat;
     private StatisticCounter fpsStat;
     private StatisticCounter fpsBGStat;
+    private StatisticCounter failedFramesStat;
     private long delta, deltaBG;
     private AtomicIntegerArray dataLeft, dataRight;
     private AtomicIntegerArray dataLow, dataMid, dataHigh;
     //private int xRunner;
-    private Graphics2D g, bufferGraphics;
+    private Graphics2D g;
     private int x, max = 0, value, absolute, num;
     private int lineOffset = 0;
     private int lineHeight = 0;
@@ -50,7 +51,7 @@ public class Drawer extends GetX implements Runnable {
     private int diff;
     private int wait;
     //private int sleepMillis;
-    private int sleepNanos;
+    private int sleepTime;
     
     private IntCache cache = new IntCache();
     private int cacheRunner, cacheRunnerDelta, xRunnerOffset;
@@ -60,12 +61,13 @@ public class Drawer extends GetX implements Runnable {
     private int lastHeight, highOffset, midOffset, lowOffset, stereoOffset;
     
     // Spectrogram
-    private double[] spectrogram = new double[2048];
+    private int spectrogramAccuracy = 4096;
+    private double[] spectrogram = new double[spectrogramAccuracy]; // 2048
     private double barWidth;
     private int barBorder;
-    private int barAmount = 200, barAmountDefault = barAmount;
-    private int barFreq = 512, barFreqDefault = barFreq;
-    private int barMaxSpot = 678, barMaxSpotDefault = barMaxSpot;
+    private int barAmount = 700, barAmountDefault = barAmount; // 200
+    private int barFreq = 1500, barFreqDefault = barFreq; // 512
+    private int barMaxSpot = modifyBar(0,0), barMaxSpotDefault = barMaxSpot;
     public double barSensitivity = 3.0d, barSensitivityDefault = barSensitivity;
     public int redBarId = -1;
     private Color barColor = new Color(200, 120, 70);
@@ -123,6 +125,17 @@ public class Drawer extends GetX implements Runnable {
     
     public int getBarFrequencyModifier() {
         return barFreq;
+    }
+    
+    public int getSpectrogramAccuracy() {
+        return spectrogramAccuracy;
+    }
+    
+    public void setSpectrogramAccuracy(int input) {
+        spectrogramAccuracy = input;
+        spectrogram = new double[spectrogramAccuracy];
+        this.stop();
+        this.start();
     }
     
     
@@ -225,7 +238,7 @@ public class Drawer extends GetX implements Runnable {
                         
                         
                         
-                        for(i = 0; i < dataPool.length; i++) {
+                        for(i = 0; i < dataPool.length / 2; i++) {
                             dataPool[i] = (ScopeLite.soundCapturer.channelsData.get(0).get(getX(i))
                                     + ScopeLite.soundCapturer.channelsData.get(1).get(getX(i))) / ScopeLite.soundCapturer.getMaxValue();
                         }
@@ -264,13 +277,16 @@ public class Drawer extends GetX implements Runnable {
     @Override
     public void run() {
         
+        int failedFrames = 0;
+        
         keepRunning = true;
-        deltaTime = new DeltaTime(true);
-        deltaTimeBG = new DeltaTime(true);
+        deltaTime = new DeltaTime(false);
+        deltaTimeBG = new DeltaTime(false);
         bufferStat = new StatisticCounter(10);
         readStat = new StatisticCounter(100);
         fpsStat = new StatisticCounter(10);
         fpsBGStat = new StatisticCounter(10);
+        failedFramesStat = new StatisticCounter(100);
         
         dataLeft = ScopeLite.soundCapturer.channelsData.get(0);
         dataRight = ScopeLite.soundCapturer.channelsData.get(1);
@@ -286,6 +302,7 @@ public class Drawer extends GetX implements Runnable {
         while(keepRunning) {
             
             delta = deltaTime.getDelta();
+            failedFrames = 0;
             
             try {
                 
@@ -302,6 +319,8 @@ public class Drawer extends GetX implements Runnable {
                 do {
 
                     do {
+                        
+                        failedFrames++;
 
                         xRunner = ScopeLite.soundCapturer.xRunner;
 
@@ -311,7 +330,7 @@ public class Drawer extends GetX implements Runnable {
                         g.fillRect(0,0,ScopeLite.screenWidth, ScopeLite.screenHeight);
                             
                             barWidth = 1.0d * ScopeLite.screenWidth / barAmount;
-                            if(barWidth < 2) {
+                            if(barWidth < 1) {
                                 barWidth = 1;
                                 barBorder = 0;
                             } else {
@@ -397,10 +416,13 @@ public class Drawer extends GetX implements Runnable {
                             
                             bufferStat.setValue(ScopeLite.soundCapturer.buffer);
                             readStat.setValue((int)ScopeLite.soundCapturer.delta);
-                            fpsStat.setValue((int)(1000000000 / delta));
-                            fpsBGStat.setValue((int)(1000000000 / deltaBG));
+                            //fpsStat.setValue((int)(1000000000 / delta));
+                            //fpsBGStat.setValue((int)(1000000000 / deltaBG));
+                            fpsStat.setValue((int)(1000 / delta));
+                            fpsBGStat.setValue((int)(1000 / deltaBG));
 
                             g.drawString("Draw FPS: " + fpsStat.getAverage()
+                                    + " Failed frames: " + failedFramesStat.getSum()
                                     + " Reads: " + 1000000000 / readStat.getAverage()
                                     + " buffer min: " + bufferStat.getMin() 
                                     + " avg: " + bufferStat.getAverage() 
@@ -426,7 +448,7 @@ public class Drawer extends GetX implements Runnable {
                         }
 
                         g.setColor(Color.GRAY);
-                        g.drawString("H for help - Copyright © 2012 Teemu Kauhanen - v1.10", ScopeLite.screenWidth - 310, ScopeLite.screenHeight - 5);
+                        g.drawString("H for help - Copyright © 2012 Teemu Kauhanen - v1.11", ScopeLite.screenWidth - 310, ScopeLite.screenHeight - 5);
 
                         g.dispose();
                         
@@ -440,19 +462,24 @@ public class Drawer extends GetX implements Runnable {
                 
             }
             
+            // Calculate failed frames
+            failedFramesStat.setValue(--failedFrames);
+            
             //4000000 = 4ms = 250fps
             // 1 000 000 000 = one second
             if(ScopeLite.maxFps > 0) {
-                wait = (1000000000 / ScopeLite.maxFps);
-                diff = (int)(System.nanoTime() - deltaTime.getLastSystemTime());
-                //sleepMillis = (wait - diff) / 1000000;
-                //sleepNanos = (wait - diff) - (1000000 * sleepMillis);
-                sleepNanos = wait - diff;
+                //wait = (1000000000 / ScopeLite.maxFps);
+                //diff = (int)(System.nanoTime() - deltaTime.getLastSystemTime());
+                wait = (1000 / ScopeLite.maxFps) + 1;
+                diff = (int)(System.currentTimeMillis() - deltaTime.getLastSystemTime());
+                
+                sleepTime = wait - diff;
+                //sleepMillis = wait - diff;
                 if(diff < wait) {
                     try {
                         //java.lang.concurrent.locks.LockSupport.parkNanos();
-                        java.util.concurrent.locks.LockSupport.parkNanos(sleepNanos);
-                        //Thread.sleep(sleepMillis, sleepNanos);
+                        //java.util.concurrent.locks.LockSupport.parkNanos(sleepNanos);
+                        Thread.sleep(sleepTime);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }

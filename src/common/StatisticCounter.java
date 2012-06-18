@@ -51,4 +51,12 @@ public class StatisticCounter {
         return sum;
     }
     
+    public int getSum() {
+        sum = 0;
+        for(a = 0; a < pool.length; a++) {
+            sum += pool[a];
+        }
+        return sum;
+    }
+    
 }
