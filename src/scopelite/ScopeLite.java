@@ -67,10 +67,10 @@ public class ScopeLite {
         "press and hold mouse to see selected bar's indicated frequency",
         "double click mouse to toggle fullscreen",
         "",
-        "Free for non-commercial use",
+        "Creative Commons Attribution CC BY 4.0",
         "Author: Teemu Kauhanen",
         "Email: teemu.kauhanen@facebook.com",
-        "Homepage: http://kaahane.viuhka.fi"};
+        "Homepage: http://www.shotbygun.com"};
     
     // PUBLIC VARIABLES
     

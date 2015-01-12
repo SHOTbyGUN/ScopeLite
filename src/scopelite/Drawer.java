@@ -7,6 +7,7 @@ package scopelite;
 import common.DeltaTime;
 import common.IntCache;
 import common.StatisticCounter;
+import edu.emory.mathcs.jtransforms.dht.DoubleDHT_1D;
 import edu.emory.mathcs.jtransforms.fft.DoubleFFT_1D;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -61,14 +62,14 @@ public class Drawer extends GetX implements Runnable {
     private int lastHeight, highOffset, midOffset, lowOffset, stereoOffset;
     
     // Spectrogram
-    private int spectrogramAccuracy = 4096;
+    private int spectrogramAccuracy = 3000;
     private double[] spectrogram = new double[spectrogramAccuracy]; // 2048
     private double barWidth;
     private int barBorder;
-    private int barAmount = 700, barAmountDefault = barAmount; // 200
-    private int barFreq = 1500, barFreqDefault = barFreq; // 512
+    private int barAmount = 1000, barAmountDefault = barAmount; // 200
+    private int barFreq = 1000, barFreqDefault = barFreq; // 512
     private int barMaxSpot = modifyBar(0,0), barMaxSpotDefault = barMaxSpot;
-    public double barSensitivity = 3.0d, barSensitivityDefault = barSensitivity;
+    public double barSensitivity = 1.0d, barSensitivityDefault = barSensitivity;
     public int redBarId = -1;
     private Color barColor = new Color(200, 120, 70);
     //private Color barColor = new Color(102, 204, 200);
@@ -198,7 +199,8 @@ public class Drawer extends GetX implements Runnable {
                 //FFT fft = new FFT();
                 
                 // New JTransforms FFT
-                DoubleFFT_1D fft = new DoubleFFT_1D(dataPool.length / 2);
+                //DoubleFFT_1D fft = new DoubleFFT_1D(dataPool.length/2);
+                DoubleDHT_1D fft = new DoubleDHT_1D(dataPool.length/2);
                 
                 
                 while (keepRunning) {
@@ -247,7 +249,7 @@ public class Drawer extends GetX implements Runnable {
                         //dataPool = fft.four1(dataPool, dataPool.length / 4, 1);
                         
                         // New FFT
-                        fft.realForwardFull(dataPool);
+                        fft.forward(dataPool);
                         
                         for(i = 0; i < dataPool.length / 2; i++) {
                             spectrogram[i] = java.lang.Math.sqrt(dataPool[i]*dataPool[i] + dataPool[i+dataPool.length/2] * dataPool[i+dataPool.length/2]);
@@ -448,7 +450,7 @@ public class Drawer extends GetX implements Runnable {
                         }
 
                         g.setColor(Color.GRAY);
-                        g.drawString("H for help - Copyright © 2012 Teemu Kauhanen - v1.11", ScopeLite.screenWidth - 310, ScopeLite.screenHeight - 5);
+                        g.drawString("H for help - Copyright © 2012 Teemu Kauhanen - v1.12", ScopeLite.screenWidth - 310, ScopeLite.screenHeight - 5);
 
                         g.dispose();
                         
